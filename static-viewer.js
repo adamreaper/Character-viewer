@@ -163,6 +163,7 @@ const resetCameraBtn = document.getElementById('resetCameraBtn');
 const tunerControlsEl = document.getElementById('tunerControls');
 const viewerFrameEl = document.getElementById('viewerFrame');
 const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+const mobileFullscreenHintEl = document.getElementById('mobileFullscreenHint');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -359,10 +360,49 @@ function resetCamera() {
   controls.update();
 }
 
-function toggleViewerFullscreen() {
-  const isFullscreen = viewerFrameEl.classList.toggle('mobile-fullscreen');
-  document.body.classList.toggle('viewer-fullscreen-active', isFullscreen);
+async function toggleViewerFullscreen() {
+  const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (!fullscreenElement) {
+    try {
+      if (viewerFrameEl.requestFullscreen) {
+        await viewerFrameEl.requestFullscreen();
+      } else if (viewerFrameEl.webkitRequestFullscreen) {
+        viewerFrameEl.webkitRequestFullscreen();
+      } else {
+        const isFullscreen = viewerFrameEl.classList.toggle('mobile-fullscreen');
+        document.body.classList.toggle('viewer-fullscreen-active', isFullscreen);
+      }
+    } catch {
+      const isFullscreen = viewerFrameEl.classList.toggle('mobile-fullscreen');
+      document.body.classList.toggle('viewer-fullscreen-active', isFullscreen);
+    }
+  } else {
+    try {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else {
+        viewerFrameEl.classList.remove('mobile-fullscreen');
+        document.body.classList.remove('viewer-fullscreen-active');
+      }
+    } catch {
+      viewerFrameEl.classList.remove('mobile-fullscreen');
+      document.body.classList.remove('viewer-fullscreen-active');
+    }
+  }
+
+  const cssFullscreen = viewerFrameEl.classList.contains('mobile-fullscreen');
+  const nativeFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const isFullscreen = cssFullscreen || nativeFullscreen;
+
   fullscreenToggleBtn.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Viewer';
+  statusEl.textContent = isFullscreen ? 'Fullscreen mode on' : 'Fullscreen mode off';
+  if (mobileFullscreenHintEl) {
+    mobileFullscreenHintEl.textContent = isFullscreen ? 'fullscreen-on' : 'fullscreen-off';
+  }
+
   setTimeout(() => {
     resize();
     resetCamera();
