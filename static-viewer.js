@@ -161,6 +161,8 @@ const posePanelEl = document.getElementById('posePanel');
 const characterListEl = document.getElementById('characterList');
 const resetCameraBtn = document.getElementById('resetCameraBtn');
 const tunerControlsEl = document.getElementById('tunerControls');
+const viewerFrameEl = document.getElementById('viewerFrame');
+const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -357,6 +359,12 @@ function resetCamera() {
   controls.update();
 }
 
+function toggleViewerFullscreen() {
+  const isFullscreen = viewerFrameEl.classList.toggle('mobile-fullscreen');
+  fullscreenToggleBtn.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Viewer';
+  setTimeout(() => resize(), 50);
+}
+
 function updateCharacterButtons() {
   [...characterListEl.querySelectorAll('.character-chip')].forEach((button) => {
     button.classList.toggle('active', button.dataset.characterId === currentCharacterId);
@@ -499,6 +507,7 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 resetCameraBtn.addEventListener('click', resetCamera);
+fullscreenToggleBtn.addEventListener('click', toggleViewerFullscreen);
 buildTunerUI();
 resize();
 
