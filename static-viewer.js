@@ -5,11 +5,11 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.176.0/examples/jsm/loaders
 const characters = [
   { id: 'ryuk', name: 'Ryuk', path: './public/models/shinigami_stance_ryuk.glb', rig: 'static', poseProfile: 'static' },
   { id: 'luffy-afro', name: 'Luffy (Afro)', path: './public/models/monkey_d._luffy_afro.glb', rig: 'static', poseProfile: 'static' },
-  { id: 'morrigan-aensland', name: 'Morrigan Aensland', path: './public/models/morrigan_aensland.glb', rig: 'static', poseProfile: 'static' },
-  { id: 'chunli-fortnite', name: 'Chun-Li Fortnite', path: './public/models/chunli.glb', rig: 'sf-chunli-a', poseProfile: 'chunli-fortnite' },
-  { id: 'nami-bikini', name: 'Nami Bikini', path: './public/models/model-2.glb', rig: 'static', poseProfile: 'static' },
-  { id: 'chunli-alt', name: 'Chun-Li Alt', path: './public/models/model-3.glb', rig: 'sf-chunli-b', poseProfile: 'chunli-alt' },
-  { id: 'mizuki-shiranui', name: 'Mizuki Shiranui', path: './public/models/model-4.glb', rig: 'static', poseProfile: 'static', modelRotation: [-Math.PI / 2, 0, 0] },
+  { id: 'morrigan-aensland', name: 'Morrigan Aensland', path: './public/models/morrigan_aensland.glb', rig: 'static', poseProfile: 'static', hiddenByCode: true },
+  { id: 'chunli-fortnite', name: 'Chun-Li Fortnite', path: './public/models/chunli.glb', rig: 'sf-chunli-a', poseProfile: 'chunli-fortnite', hiddenByCode: true },
+  { id: 'nami-bikini', name: 'Nami Bikini', path: './public/models/model-2.glb', rig: 'static', poseProfile: 'static', hiddenByCode: true },
+  { id: 'chunli-alt', name: 'Chun-Li Alt', path: './public/models/model-3.glb', rig: 'sf-chunli-b', poseProfile: 'chunli-alt', hiddenByCode: true },
+  { id: 'mizuki-shiranui', name: 'Mizuki Shiranui', path: './public/models/model-4.glb', rig: 'static', poseProfile: 'static', modelRotation: [-Math.PI / 2, 0, 0], hiddenByCode: true },
 ];
 
 const poses = [
@@ -167,6 +167,7 @@ const tunerControlsEl = document.getElementById('tunerControls');
 const viewerFrameEl = document.getElementById('viewerFrame');
 const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
 const mobileFullscreenHintEl = document.getElementById('mobileFullscreenHint');
+const appTitleEl = document.getElementById('appTitle');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -213,9 +214,12 @@ scene.add(floor);
 
 const loader = new GLTFLoader();
 let currentModel = null;
-let currentCharacterId = characters[0].id;
+let hiddenModelsUnlocked = false;
+let secretTapCount = 0;
+let secretTapTimer = null;
+let currentCharacterId = characters.find((character) => !character.hiddenByCode)?.id || characters[0].id;
 let currentPoseId = 'idle';
-let currentCharacter = characters[0];
+let currentCharacter = characters.find((character) => character.id === currentCharacterId) || characters[0];
 let lastFramedCenter = new THREE.Vector3(0, 1, 0);
 let lastCameraOffset = new THREE.Vector3(0, 1.2, 6.5);
 let liveTweaks = {};
@@ -363,6 +367,23 @@ function resetCamera() {
   controls.update();
 }
 
+function handleSecretTitleTap() {
+  secretTapCount += 1;
+  if (secretTapTimer) clearTimeout(secretTapTimer);
+
+  if (secretTapCount >= 3) {
+    hiddenModelsUnlocked = !hiddenModelsUnlocked;
+    secretTapCount = 0;
+    renderCharacterButtons();
+    statusEl.textContent = hiddenModelsUnlocked ? 'Hidden models unlocked' : 'Hidden models hidden';
+    return;
+  }
+
+  secretTapTimer = setTimeout(() => {
+    secretTapCount = 0;
+  }, 700);
+}
+
 async function toggleViewerFullscreen() {
   const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
 
@@ -410,6 +431,23 @@ async function toggleViewerFullscreen() {
     resize();
     resetCamera();
   }, 80);
+}
+
+function getVisibleCharacters() {
+  return characters.filter((character) => hiddenModelsUnlocked || !character.hiddenByCode);
+}
+
+function renderCharacterButtons() {
+  characterListEl.innerHTML = '';
+  getVisibleCharacters().forEach((character) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `character-chip${character.id === currentCharacterId ? ' active' : ''}`;
+    button.dataset.characterId = character.id;
+    button.textContent = character.name;
+    button.addEventListener('click', () => loadCharacter(character));
+    characterListEl.appendChild(button);
+  });
 }
 
 function updateCharacterButtons() {
@@ -525,15 +563,7 @@ function loadCharacter(character) {
   );
 }
 
-characters.forEach((character) => {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = `character-chip${character.id === currentCharacterId ? ' active' : ''}`;
-  button.dataset.characterId = character.id;
-  button.textContent = character.name;
-  button.addEventListener('click', () => loadCharacter(character));
-  characterListEl.appendChild(button);
-});
+renderCharacterButtons();
 
 poses.forEach((pose) => {
   const button = document.createElement('button');
@@ -555,6 +585,7 @@ function resize() {
 window.addEventListener('resize', resize);
 resetCameraBtn.addEventListener('click', resetCamera);
 fullscreenToggleBtn.addEventListener('click', toggleViewerFullscreen);
+appTitleEl.addEventListener('click', handleSecretTitleTap);
 buildTunerUI();
 resize();
 
