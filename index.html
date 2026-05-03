@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chun-Li Pose Viewer</title>
+  <link rel="stylesheet" href="./static-viewer.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <p class="eyebrow">3D character viewer</p>
+      <h1>Chun-Li Pose Viewer</h1>
+      <p class="subtitle">Simple standalone viewer with preset poses.</p>
+
+      <section class="panel">
+        <h2>Status</h2>
+        <div id="status" class="status">Booting viewer…</div>
+        <button id="resetCameraBtn" class="character-chip" type="button" style="margin-top:12px;">Reset Camera</button>
+      </section>
+
+      <section class="panel">
+        <h2>Character</h2>
+        <div id="characterList" class="character-list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Current pose</h2>
+        <strong id="poseName">Idle</strong>
+        <p id="poseDescription">Neutral standing showcase pose.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Pose Tuner</h2>
+        <div id="tunerControls" class="tuner-controls"></div>
+      </section>
+    </aside>
+
+    <main class="viewer-column">
+      <div class="viewer-frame">
+        <canvas id="viewer"></canvas>
+        <div class="viewer-overlay">APP BOOTED</div>
+      </div>
+      <section id="posePanel" class="pose-panel"></section>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('status').textContent = 'Inline script started.';
+    window.addEventListener('error', function (event) {
+      const status = document.getElementById('status');
+      status.textContent = 'JS error: ' + (event.message || 'unknown error');
+    });
+  </script>
+  <script type="module" src="./static-viewer.js"></script>
+</body>
+</html>
