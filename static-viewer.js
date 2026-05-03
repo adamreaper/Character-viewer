@@ -361,8 +361,12 @@ function resetCamera() {
 
 function toggleViewerFullscreen() {
   const isFullscreen = viewerFrameEl.classList.toggle('mobile-fullscreen');
+  document.body.classList.toggle('viewer-fullscreen-active', isFullscreen);
   fullscreenToggleBtn.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Viewer';
-  setTimeout(() => resize(), 50);
+  setTimeout(() => {
+    resize();
+    resetCamera();
+  }, 80);
 }
 
 function updateCharacterButtons() {

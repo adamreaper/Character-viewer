@@ -112,8 +112,23 @@ h1 { margin: 0; font-size: 2rem; }
   position: fixed;
   inset: 0;
   z-index: 9999;
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
   background: #0b0d12;
+}
+
+body.viewer-fullscreen-active {
+  overflow: hidden !important;
+}
+
+body.viewer-fullscreen-active .sidebar,
+body.viewer-fullscreen-active .pose-panel {
+  display: none;
+}
+
+body.viewer-fullscreen-active .viewer-column {
+  display: block;
 }
 .pose-panel {
   display: grid;
