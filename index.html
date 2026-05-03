@@ -15,27 +15,27 @@
       <h1>Character Poser</h1>
       <p class="subtitle">Simple standalone viewer with preset poses.</p>
 
-      <section class="panel">
-        <h2>Status</h2>
+      <details class="panel collapsible-panel" open>
+        <summary>Status</summary>
         <div id="status" class="status">Booting viewer…</div>
         <button id="resetCameraBtn" class="character-chip" type="button" style="margin-top:12px;">Reset Camera</button>
-      </section>
+      </details>
 
-      <section class="panel">
-        <h2>Character</h2>
+      <details class="panel collapsible-panel" open>
+        <summary>Character</summary>
         <div id="characterList" class="character-list"></div>
-      </section>
+      </details>
 
-      <section class="panel">
-        <h2>Current pose</h2>
+      <details class="panel collapsible-panel" open>
+        <summary>Current pose</summary>
         <strong id="poseName">Idle</strong>
         <p id="poseDescription">Neutral standing showcase pose.</p>
-      </section>
+      </details>
 
-      <section class="panel">
-        <h2>Pose Tuner</h2>
+      <details class="panel collapsible-panel">
+        <summary>Pose Tuner</summary>
         <div id="tunerControls" class="tuner-controls"></div>
-      </section>
+      </details>
     </aside>
 
     <main class="viewer-column">

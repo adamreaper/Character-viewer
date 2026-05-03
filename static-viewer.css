@@ -45,6 +45,30 @@ h1 { margin: 0; font-size: 2rem; }
   background: rgba(255,255,255,0.03);
 }
 .panel h2 { margin-top: 0; font-size: 1rem; }
+
+.collapsible-panel summary {
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.collapsible-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-panel summary::after {
+  content: '▾';
+  float: right;
+  color: #9fb0d3;
+}
+
+.collapsible-panel:not([open]) summary::after {
+  content: '▸';
+}
+
+.collapsible-panel > :not(summary) {
+  margin-top: 14px;
+}
 .status { color: #d9e1f3; line-height: 1.5; }
 .character-chip, .pose-card {
   border: 1px solid rgba(255,255,255,0.08);

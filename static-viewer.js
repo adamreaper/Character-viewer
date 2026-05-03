@@ -3,6 +3,8 @@ import { OrbitControls } from 'https://unpkg.com/three@0.176.0/examples/jsm/cont
 import { GLTFLoader } from 'https://unpkg.com/three@0.176.0/examples/jsm/loaders/GLTFLoader.js?module';
 
 const characters = [
+  { id: 'ryuk', name: 'Ryuk', path: './public/models/shinigami_stance_ryuk.glb', rig: 'static', poseProfile: 'static' },
+  { id: 'morrigan-aensland', name: 'Morrigan Aensland', path: './public/models/morrigan_aensland.glb', rig: 'static', poseProfile: 'static' },
   { id: 'chunli-fortnite', name: 'Chun-Li Fortnite', path: './public/models/chunli.glb', rig: 'sf-chunli-a', poseProfile: 'chunli-fortnite' },
   { id: 'nami-bikini', name: 'Nami Bikini', path: './public/models/model-2.glb', rig: 'static', poseProfile: 'static' },
   { id: 'chunli-alt', name: 'Chun-Li Alt', path: './public/models/model-3.glb', rig: 'sf-chunli-b', poseProfile: 'chunli-alt' },
