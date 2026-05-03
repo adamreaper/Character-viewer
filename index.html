@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chun-Li Pose Viewer</title>
+  <title>Character Poser</title>
+  <meta name="apple-mobile-web-app-title" content="Character Poser" />
+  <link rel="apple-touch-icon" href="./public/icon.png" />
   <link rel="stylesheet" href="./static-viewer.css" />
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
       <p class="eyebrow">3D character viewer</p>
-      <h1>Chun-Li Pose Viewer</h1>
+      <h1>Character Poser</h1>
       <p class="subtitle">Simple standalone viewer with preset poses.</p>
 
       <section class="panel">
@@ -39,7 +41,6 @@
     <main class="viewer-column">
       <div id="viewerFrame" class="viewer-frame">
         <canvas id="viewer"></canvas>
-        <div class="viewer-overlay">APP BOOTED</div>
         <button id="fullscreenToggleBtn" class="fullscreen-toggle" type="button">Fullscreen Viewer</button>
       </div>
       <div id="mobileFullscreenHint" style="display:none;"></div>
